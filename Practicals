@@ -1,0 +1,368 @@
+#Practical-1
+
+lis=[1,2,3,4,5,6]
+del(lis[3:5])
+print(lis)
+lis.append(9)
+print(lis)
+lis.insert(4,8)
+print(lis)
+list2=[10,11,13,14]
+lis.extend(list2)
+print(lis)
+lis.remove(10)
+print(lis)
+lis.pop(3)
+print(lis)
+
+
+#Practical-2
+
+att=()
+start=True
+while(start):
+    name=input("Enter Your Name:")
+    roll=input("Enter Your Roll No:")
+    age=input("Enter Your Age:")
+    stud=("Name:"+name,"Roll No:"+roll,"Age:"+age)
+    att +=stud
+    req=int(input("Enter 1 to insert more data or any number to view the avaliable data"))
+    if(req==1):
+        start=True
+    else:
+        print(att)
+        start=False
+        
+
+#Practical-3
+
+rec=set()
+start=True
+while(start):
+    name=input("Enter your name: ")
+    empid=input("Enter your Id: ")
+    branch=input("Enter your Branch: ")
+    stud=("Name:"+name,"Employee id:"+empid,"Branch:"+branch)
+    rec=rec.union(stud)
+    n=int(input("Enter 1 to Add Another data Or enter any Number to view avaliable data : "))
+    if(n==1):
+        start=True
+    else:
+        print(rec)
+        start=False
+
+#Practical-4
+
+rec={}
+st=set()
+n=int(input("Enter number of employees: "))
+for i in range(1,n+1):
+    name=input(f'Enter the name of emp{i}: ')
+    salary=input(f'Enter Salary of emp[{i}: ')
+    emp={"name":name,"salary":salary}
+    st.add(salary)
+    rec[i-1]=emp
+print(f'Employee Record: {rec}')
+print("Highest salary: "+max(st))
+print("Lowest salary: "+min(st))
+
+#Practical-5
+
+name=input("Enter Your Full Name")
+print("Concatination:"+" Hey "+ name)
+print("Splitting Name:")
+print(name.split())
+print("Joining '-' in Name:")
+print('-'.join(name))
+print("Replacing Name:")
+print(name.replace('Sawant','Vilas Sawant'))
+print("Finding s:")
+print(name.find('s'))
+print("Uppercase Name:"+ name.upper())
+print("Iterating letters of Name:")
+for letters in name:
+    print(letters)
+print("Membership in str:")
+print('s'in name)
+
+#Practical-6
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+df = pd.read_csv('pokemon.csv')
+#usage of pandas df.head()
+df.drop('#', inplace=True, axis=1)
+df.head()
+
+df.shape
+#usage of numpy
+df['Type 2'] = df['Type 2'].apply(str)
+df.info()
+newdf = pd.DataFrame(df, columns=['Name','HP'])
+newdf.head()
+newdf.shape
+plt.rcParams["figure.figsize"] = (20, 9)
+plt.bar(newdf['Name'].head(), newdf['HP'].head())
+plt.show()
+
+#Practical-7&8
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+df = pd.read_csv('pokemon.csv')
+#usage of pandas df.head()
+df.drop('#', inplace=True, axis=1)
+df.head()
+df.shape
+#usage of numpy
+df['Type 2'] = df['Type 2'].apply(str)
+df.info()
+newdf = pd.DataFrame(df, columns=['Name','HP'])
+newdf.head()
+newdf.shape
+plt.rcParams["figure.figsize"] = (20, 9)
+plt.scatter(newdf['Name'].head(), newdf['HP'].head())
+plt.show()
+
+#Practical-9
+
+import pandas as pd
+import matplotlib.pyplot as plt
+#Standarized the dataset features
+from sklearn.preprocessing import StandardScaler
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+# load dataset into Pandas DataFrame
+df = pd.read_csv(url, names=['sepal length','sepal width','petal length','petal width','target'])
+df.head()
+mean_sepal_length = df['sepal length'].mean()
+mean_sepal_length
+std_dev_sepal_length = df['sepal length'].std()
+std_dev_sepal_length
+(5.1-mean_sepal_length)/std_dev_sepal_length
+feature = ['sepal length', 'sepal width', 'petal length', 'petal width']
+x = df.loc[:,feature]
+y = df.loc[:,'target']
+x = StandardScaler().fit_transform(x)
+standardised_values = pd.DataFrame(x,columns=feature)
+standardised_values
+#PCA PROJECTION OF 2D
+from sklearn.decomposition import PCA
+pca = PCA(n_components=2)
+pct = pca.fit_transform(x)
+principal_df = pd.DataFrame(pct,columns=['pc1','pc2'])
+#CONCATINATING TARGET
+finaldf= pd.concat([principal_df,df[['target']]],axis=1)
+finaldf.head()
+#PLOTTING 2 DIEMENTIONAL DATA
+fig = plt.figure(figsize = (8,8))
+ax = fig.add_subplot(1,1,1) 
+ax.set_xlabel('Principal Component 1', fontsize = 15)
+ax.set_ylabel('Principal Component 2', fontsize = 15)
+ax.set_title('2 component PCA', fontsize = 20)
+targets = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
+colors = ['r', 'g', 'b']
+for target, color in zip(targets,colors):
+    indicesToKeep = finaldf['target'] == target
+    ax.scatter(finaldf.loc[indicesToKeep, 'pc1'], finaldf.loc[indicesToKeep, 'pc2'], c = color, s = 50)
+    ax.legend(targets)
+ax.grid()
+#SHOWS TWO SEPARATE VARIENCE PERCENT
+pca.explained_variance_ratio_
+
+
+#Practical-10
+
+
+import pandas as pd
+from sklearn.datasets import load_iris
+iris_data = load_iris()
+df = pd.DataFrame(iris_data.data, columns=iris_data.feature_names)
+print(df)
+from sklearn.model_selection import train_test_split
+training_data, testing_data = train_test_split(df, test_size=0.2, random_state=25)
+#random state is used to keep the data constant if it is 0 then everytime u run
+#the program the value of data changes.
+print(f"No. of training examples: {training_data.shape[0]}")
+print(f"No. of testing examples: {testing_data.shape[0]}")
+training_data.head()
+
+#Practical-11
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import pandas as pd
+apples_oranges = pd.read_csv("apples_and_oranges.csv")
+apples_oranges.head()# create a dictionary to colour classes
+color_dict = dict({'orange':'orange','apple':'green'}) #scatterplot
+plt.xlabel('Weight')
+plt.ylabel('Size')
+plt.title('Sizes and Weights of apples and oranges')
+sns.scatterplot(data=apples_oranges, x="Weight", y="Size", hue="Class", palette = color_dict)
+plt.show()# define input data
+X = apples_oranges[["Weight", "Size"]]# define target
+y = apples_oranges.Class
+# fitting the support vector machine using a linear kernel
+from sklearn import svm
+clf = svm.SVC(kernel = 'linear', C=10)
+clf.fit(X, y)
+b = clf.intercept_
+w_1 = clf.coef_[0][0]
+w_2 = clf.coef_[0][1]
+b, w_1, w_2
+# plotting the hyperplane and support vector lines
+ax = plt.gca()
+sns.scatterplot(data=apples_oranges, x="Weight", y="Size", hue="Class", palette = color_dict)
+xlim = ax.get_xlim()
+ylim = ax.get_ylim()
+xx = np.linspace(xlim[0], xlim[1], 30)
+yy = np.linspace(ylim[0], ylim[1], 30)
+YY, XX = np.meshgrid(yy, xx)
+xy = np.vstack([XX.ravel(), YY.ravel()]).T
+Z = clf.decision_function(xy).reshape(XX.shape)
+ax.contour(XX, YY, Z, colors='k', levels=[-1, 0, 1], alpha=0.5,linestyles=['--', '-', '--'])
+ax.scatter(clf.support_vectors_[:, 0], clf.support_vectors_[:, 1], s=100, linewidth=1, facecolors='none', edgecolors='k')
+plt.show()
+# obtain support vectors
+clf.support_vectors_
+clf.predict([[70, 4.6]])
+
+#Practical-12
+
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+import pandas as pd
+df = pd.read_csv('train_and_test2.csv')
+df
+kmeans_model = KMeans(n_clusters=6,max_iter=1000)
+kmeans_model.fit(df[['Age','Fare']])
+KMeans(algorithm='auto', copy_x=True, init='k-means++', max_iter=1000,
+       n_clusters=6,	n_init=10,	n_jobs=None,	precompute_distances='auto',
+       random_state=None, tol=0.0001, verbose=0)
+color_dictionary = {0: 'red', 1: 'blue', 2: 'green' , 3: 'yellow',4: 'pink', 5: 'black'}
+label_list = kmeans_model.labels_.tolist()
+df['color'] = label_list
+for i in color_dictionary:
+    df['color'] = df['color'].replace(i,color_dictionary[i])
+    y = df['Fare']
+    x = df ['Age']
+fig, ax = plt.subplots()
+ax.scatter(x, y,c = df['color'], s = 100)
+ax.legend()
+
+plt.show()
+
+#Practical-13
+
+# Importing the libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+# Importing the dataset
+dataset = pd.read_csv('C:\\Users\\Meghna\\Desktop\\DATASCI\\Social_Network_Ads.csv')
+
+#X contains the attributes.
+#Because we don’t want to take in consideration the first two columns, we will copy only column 2 and 3
+X = dataset.iloc[:, [2, 3]].values
+
+#The labels are in the 4th column, so we will copy this column in variable y
+y = dataset.iloc[:, 4].values
+
+#sklearn has the method called train_test_split, which will split our data set returning 4 values
+from sklearn.model_selection import train_test_split
+
+#25% of the data set for test and 75% for train. 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+
+#Distance is much heigher between salary and age column to resolve this issue we used standardscaler.
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+#importing the KNeighborsClassifier from sklearn. This takes multiple parameters.
+#n_neighbors,algoritm(for design structure),matric (for distance by default euclidean, Manhattan)
+from sklearn.neighbors import KNeighborsClassifier
+classifier = KNeighborsClassifier(n_neighbors = 2)
+classifier.fit(X_train, y_train)
+
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
+
+
+
+# Making the Confusion Matrix to check the accuracy
+#TP+TN/TP+FN+FP+TN (formula TP=true positive,
+#FN=false negative,[Observation is positive, but is predicted negative]
+#TN=true negative, [ Observation is negative, and is predicted to be negative]
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+
+
+# Visualising the Training set results
+#meshgrid() creates a rectangular grid out of an array of x values and an array of y values here x = X1 and y = X2
+#contourf method use to fill the background with the color of the class
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_train, y_train
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.75, cmap = ListedColormap(('red', 'green')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green'))(i), label = j)
+plt.title('Classifier (Training set)')
+plt.xlabel('Age')
+plt.ylabel('Estimated Salary')
+plt.legend() #use  to Place a legend on the axes.
+plt.show()
+
+
+
+#Practical-14
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+def estimate_coef(x, y):
+    # number of observations/points
+    n = np.size(x)
+    # mean of x and y vector
+    m_x = np.mean(x)
+    m_y = np.mean(y)
+    # calculating cross-deviation and deviation about x
+    SS_xy = np.sum(y*x) - n*m_y*m_x
+    SS_xx = np.sum(x*x) - n*m_x*m_x
+    # calculating regression coefficients
+    b_1 = SS_xy / SS_xx
+    b_0 = m_y - b_1*m_x
+    return (b_0, b_1)
+def plot_regression_line(x, y, b):
+    # plotting the actual points as scatter plot
+    plt.scatter(x, y, color = "b",marker = "s", s = 30)
+    # predicted response vector
+    y_pred = b[0] + b[1]*x
+    # plotting the regression line
+    plt.plot(x, y_pred, color = "g") # putting labels
+    plt.xlabel('x')
+    plt.ylabel('y')
+# function to show plot plt.show()
+def main():
+    # observations / data
+    x = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    y = np.array([1, 3, 2, 5, 7, 8, 8, 9, 10, 12])
+    # estimating coefficients
+    b = estimate_coef(x, y)
+    print("Estimated coefficients:\nb_0 = {} \nb_1 = {}".format(b[0], b[1]))
+    # plotting regression line
+    plot_regression_line(x, y, b)
+if __name__== "__main__":
+          main()
+
+
